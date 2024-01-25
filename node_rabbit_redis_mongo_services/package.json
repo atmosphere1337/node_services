@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "amqplib": "^0.10.3",
+    "redis": "^4.6.12"
+  }
+}

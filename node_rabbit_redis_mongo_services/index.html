@@ -1,0 +1,33 @@
+<div>
+	<form method="POST" action="http://localhost:1337/">
+		<input name="login">	
+		<input name="password">	
+		<input type="submit">	
+	</form>
+<div>
+<div>
+	<input id="login">
+	<input id="password">
+	<button id="send">send</button>
+</div>
+<div id="ans">
+	
+</div>
+<script>
+	document.getElementById("ans").innerText = "hello world";
+	document.getElementById("send").addEventListener('click', () => {
+		var login = document.getElementById("login").value;
+		var password = document.getElementById("password").value;
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', "http://localhost:1337/", true);
+		xhr.onreadystatechange = function () {
+			if (this.readyState == 4 && this.status == 200) {
+				alert('this');
+				document.getElementById("ans").innerText = this.responseText;
+			}
+		}
+		xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+		xhr.send(`login=${login}&password=${password}`);
+	});
+	
+</script>
