@@ -1,0 +1,35 @@
+.background {
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: green;
+}
+
+.container {
+	padding: 30px;
+	width: 800px;
+	height: 500px;
+	border-radius: 20px;
+	background-color: yellow;
+}
+.title {
+	text-align: center;
+	font-size: 30px;
+	font-weight: bold;
+}
+.message {
+	margin-top: 20px;
+	padding: 10px;
+	margin-bottom: 20px;
+	background-color: pink;
+	height: 300px;
+	width: 300px;
+	border-radius: 10px;
+}
+.error {
+	color: red;
+}
+.success {
+	color: green;
+}
