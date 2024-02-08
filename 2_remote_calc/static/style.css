@@ -1,0 +1,27 @@
+* {
+	margin: 0;
+	font-size: 25px;
+}
+.back {
+	background-color: #AA00FF;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.container {
+	background-color: #00AAFF;
+	padding: 200px;
+	border-radius: 15px;
+}
+.container input, select, button, .ans {
+	width: 150px;
+	display: block;
+	text-align: center;
+}
+.container button {
+	background-color: #FF00AA;
+}
+.ans {
+	background-color: #AA7777;
+}
