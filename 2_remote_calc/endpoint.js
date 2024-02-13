@@ -1,49 +1,8 @@
+// ENDPOINT
 const http = require('http');
 const amqplib = require('amqplib');
 const PORT = 1337;
 
-/*
-function calculate(body) {
-	let ans = 0;
-	let f1 = parseInt(body.f1);
-	let f2 = parseInt(body.f2);
-	switch (body.op) {
-		case "+" : 
-			ans = f1 + f2;
-			break;
-		case "-" : 
-			ans = f1 - f2;
-			break;
-		case "*" : 
-			ans = f1 * f2;
-			break;
-		case "/" : 
-			ans = f1 / f2;
-			break;
-		default:
-			break;
-	}
-	return ans;
-}
-*/
-
-async function rabbitmq(msg, res) {
-	const conn = await amqplib.connect('amqp://localhost');
-	const ch1 = await conn.createChannel();
-	const ch2 = await conn.createChannel();
-	await ch1.assertQueue('queue1');
-	await ch2.assertQueue('queue2');
-	ch1.sendToQueue('queue1', Buffer.from(msg));
-	
-	ch2.consume('queue2', (msg) => {
-		console.log('asdfadsf');
-		console.log(msg.content.toString());
-		let ans = msg.content.toString();
-		ch2.ack(msg);
-		res.statusCode = 200;
-		res.end(ans);
-	});
-}
 
 function main(req, res) {
 	console.log(req.method + " " + req.url);
@@ -74,20 +33,25 @@ function main(req, res) {
 			let correlationId = Math.random().toString();
 			const conn = await amqplib.connect('amqp://localhost');
 			const ch = await conn.createChannel();
-			const queue = await ch.assertQueue('', { exclusive: true });
+			const queue = await ch.assertQueue('' , { exclusive: true } );
+			ch.assertQueue('mongo-compute', { durable: false });
+			ch.assertQueue('endpoint-redis', {durable: false});
+			ch.assertQueue('redis-mongo', { durable: false, });
 			// 11111111111111111111111111111111111111111
-			ch.sendToQueue('rpc_queue', Buffer.from(body), {
+			ch.sendToQueue('endpoint-redis', Buffer.from(body), {
 				correlationId: correlationId,
 				replyTo: queue.queue,
 			});
-			//44444444444444444444444444
+			//99999999999999999999999999999999
 			ch.consume(queue.queue, (msg) => {
 				if (msg.properties.correlationId == correlationId) {
-					console.log('asdfadsf');
-					console.log(msg.content.toString());
-					let ans = msg.content.toString();
+					let ans = JSON.stringify({
+						ans: msg.content.toString(),
+						src: msg.properties.headers.producer.toString(),
+					});
 					res.statusCode = 200;
 					res.end(ans);
+					console.log('Producer: ' , msg.properties.headers.producer);
 					setTimeout( ()=>{
 						conn.close();
 					}, 500);
